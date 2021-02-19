@@ -1,0 +1,1032 @@
+<html><head>
+    <meta http-equiv="Cache-Control" content="no-cache,no-store, must-revalidate">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>个人成绩</title>
+    <link href="/favicon.ico" type="image/x-icon" rel="icon">
+    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <link type="text/css" href="/Content/Telerik/telerik.common.css" rel="stylesheet">
+<link type="text/css" href="/Content/Telerik/telerik.office2007.css" rel="stylesheet">
+
+    <link href="/Content/default1.css" rel="stylesheet" type="text/css">
+    <script src="/Scripts/jquery-1.6.4.min.js" type="text/javascript"></script>
+    
+    <script language="javascript" type="text/javascript">
+        //此处放Javascript全局变量
+        var rootHref = "/";
+        var firstFlag = true;
+
+        $(document).ready(function(){
+            
+            //页面出现滚动条但弹窗不出现滚动条
+            var frame = self.parent.frames["_mainFrame"];
+            if(frame != undefined){
+                //设置滚动条
+                frame.document.body.style.overflow="auto"
+                //最小宽度
+                frame.document.body.style.minWidth="805px"
+            }
+        
+        });
+    </script>
+    
+    <script src="/Scripts/js_min.js" type="text/javascript"></script>
+    <script src="/Content/lhgDialog/lhgdialog.min.js" type="text/javascript"></script>
+    <script src="/Scripts/default.js" type="text/javascript"></script>
+    <script src="/Scripts/textbox.js" type="text/javascript"></script>
+    <script src="/Scripts/linkerManage.js" type="text/javascript"></script>
+    
+    <script src="/Scripts/string-ext.js" type="text/javascript"></script>
+
+    <script src="/Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <link href="/Scripts/easyUI/icon.css" rel="stylesheet" type="text/css">
+    <link href="/Scripts/easyUI/default/easyui.css" rel="stylesheet" type="text/css">
+
+    
+    
+</head>
+<body style="background-color: rgb(255, 255, 255); margin-left: 15px; margin-right: 15px; overflow: auto; min-width: 805px;">
+    <div id="action_activity_pane" style="position: absolute; width: 100%; height: 100%;
+        display: none;">
+    </div>
+    <div id="mainContent">
+        <style type="text/css">
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //table表格隔行添加class = "alter"，隔行增加颜色
+        //$('div.table-list > form > table > tbody > tr').removeClass('alter');
+        //$("#GradePoint").addClass('alter');
+
+        $('select[id=SemesterName]').change(function () {
+
+            var SemesterNameStr;
+            $("option").each(
+               function () {
+                   if (this.selected) {
+                       SemesterNameStr = this.text;
+                       return false;
+                   }
+               }
+            );
+
+            window.location.href = '/StuGrade/Index?' + "SemesterName=" + this.value + "&SemesterNameStr=" + encodeURI(SemesterNameStr);
+        });
+
+        $("a[id=updateResitStatusID]").click(function () {
+
+            //如果链接不可用，则什么都不做
+            if ("disabled" == $(this).attr("disabled")) {
+                return false;
+            }
+
+            // 提示
+            var title = '';
+            if (!confirm("是否报名参加 " + title + "？")) {
+                return false;
+            }
+
+            var taskNO = $(this).attr("TaskNO");
+            var studentID = $(this).attr("StuentID");
+            var rowNO = $(this).attr("rowNO");
+            var opType = $(this).attr("OpType");
+
+            $.get($(this).attr("href"),
+                   {
+                       TaskNO: taskNO,
+                       StudentID: studentID,
+                       time: new Date().toLocaleString(),
+                       OpType:opType
+                   },
+                   function (data) {
+                       if (0 == data.Status) {
+                           window.location.reload();
+                       }
+                       else {
+                           alert(data.Message);
+                       }
+                   });
+
+            return false;
+        });
+
+        $("a[id=updateResitStatusCancelID]").click(function () {
+
+            debugger;
+
+            //如果链接不可用，则什么都不做
+            if ("disabled" == $(this).attr("disabled")) {
+                return false;
+            }
+
+            // 提示
+            var title = '';
+            if (!confirm("是否取消 " + title + "报名？")) {
+                return false;
+            }
+
+            var taskNO = $(this).attr("TaskNO");
+            var studentID = $(this).attr("StuentID");
+            var rowNO = $(this).attr("rowNO");
+            var opType = $(this).attr("OpType");
+
+            $.get($(this).attr("href"),
+                   {
+                       TaskNO: taskNO,
+                       StudentID: studentID,
+                       time: new Date().toLocaleString(),
+                       OpType: opType
+                   },
+                   function (data) {
+                       if (0 == data.Status) {
+                           window.location.reload();
+                       }
+                       else {
+                           alert(data.Message);
+                       }
+                   });
+
+            return false;
+        });
+
+        $('#btnViewBukaoAnpai').click(function () {
+            window.location.href = '/StuGrade/ViewBukaoSchedule';
+        });
+
+    });
+
+</script>
+<div>
+    <div>
+<form action="/StuGrade" id="formSearch" method="post">                <b class="b1"></b><b class="b2 d1"></b><b class="b3 d1"></b><b class="b4 d1"></b>
+                <div class="b d1" id="searchtool_Div">
+                    <div style="float: left">
+                        <div class="labelMargin">
+                            学期 <select id="SemesterName" name="SemesterName" selectsemestername="20201"><option selected="selected" value="20201">2020学年 第一学期</option>
+<option value="20192">2019学年 第二学期</option>
+<option value="20191">2019学年 第一学期</option>
+</select>
+                        </div>
+                    </div>
+                    <div style="float: right; margin-right: 5px">
+                        <a href="/StuGrade/GradePointCaculateMethods">绩点计算依据</a>
+                    </div>
+                </div>
+                <b class="b4b d1"></b><b class="b3b d1"></b><b class="b2b d1"></b><b class="b1b">
+                </b>
+</form>    </div>
+</div>
+
+<div style="padding-bottom: 14px; padding-top: 8px; padding-left: 8px" align="center">
+    <div style="float: left">
+        <input class="bigBtn" hrefex="/ViewBukaoSchedule/?" id="btnViewBukaoAnpai" type="button" value="查看考试/重修安排">
+    </div>
+    <h2>
+        19大数据2 许兆(1910311210) 2020学年 第一学期 
+    </h2>
+    <div style="float: right; margin-bottom: 5px">
+
+
+
+    </div>
+</div>
+<div style="margin-bottom: 10px">
+    平均学分绩点
+    3.5636
+</div>
+<div class="table-list">
+<form action="/StuGrade/Index" method="post">        <table>
+            <tbody><tr>
+                <th>
+                    任务编号
+                </th>
+                <th>
+                    课程名称
+                </th>
+                <th>
+                    课程类型
+                </th>
+                <th>
+                    绩点
+                </th>
+                <th>
+                    学分
+                </th>
+                <th>
+                    平时成绩(A)
+                </th>
+                <th>
+                    期末成绩(C)
+                </th>
+                <th>
+                    成绩权重
+                </th>
+                <th>
+                    总成绩
+                </th>
+                <th>
+                    补考报名
+                </th>
+                <th>
+                    公布成绩
+                </th>
+                <th>
+                    课程评教
+                </th>
+            </tr>
+        <tr class="alter">
+            <td>
+                202018018
+            </td>
+            <td>
+                可再生能源与低碳社会
+            </td>
+            <td>
+                公选课
+            </td>
+            <td>
+                4.8000
+            </td>
+            <td>
+                1.0
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                C:100
+            </td>
+            
+
+            <td>
+                98
+            </td>
+            <td rowno="0">
+                            <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                202015907
+            </td>
+            <td>
+                2020夏季短学期实践答辩
+            </td>
+            <td>
+                52综合实践
+            </td>
+            <td>
+                4.8000
+            </td>
+            <td>
+                1.0
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                98
+            </td>
+            <td>
+                C:100
+            </td>
+            
+
+            <td>
+                98
+            </td>
+            <td rowno="1">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="alter">
+            <td>
+                202015555
+            </td>
+            <td>
+                电子实习(一)
+            </td>
+            <td>
+                50基础实践
+            </td>
+            <td>
+                3.0000
+            </td>
+            <td>
+                2.0
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                80
+            </td>
+            <td>
+                C:100
+            </td>
+            
+
+            <td>
+                80
+            </td>
+            <td rowno="2">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                202014760
+            </td>
+            <td>
+                物理实验(一)-1
+            </td>
+            <td>
+                11通识教育必修课
+            </td>
+            <td>
+                2.5000
+            </td>
+            <td>
+                2.0
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                75
+            </td>
+            <td>
+                C:100
+            </td>
+            
+
+            <td>
+                75
+            </td>
+            <td rowno="3">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="alter">
+            <td>
+                202013074
+            </td>
+            <td>
+                兴趣体育选修课-1-素拓（限男生）
+            </td>
+            <td>
+                12通识教育选修课
+            </td>
+            <td>
+                4.4000
+            </td>
+            <td>
+                1.0
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                94
+            </td>
+            <td>
+                C:100
+            </td>
+            
+
+            <td>
+                94
+            </td>
+            <td rowno="4">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                202011862
+            </td>
+            <td>
+                数据结构课程设计
+            </td>
+            <td>
+                51专业实践
+            </td>
+            <td>
+                4.5000
+            </td>
+            <td>
+                1.0
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                95
+            </td>
+            <td>
+                C:100
+            </td>
+            
+
+            <td>
+                95
+            </td>
+            <td rowno="5">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="alter">
+            <td>
+                202011843
+            </td>
+            <td>
+                大学生创业基础
+            </td>
+            <td>
+                12通识教育选修课
+            </td>
+            <td>
+                4.4000
+            </td>
+            <td>
+                2.0
+            </td>
+            <td>
+                91
+            </td>
+            <td>
+                96
+            </td>
+            <td>
+                A:40,C:60
+            </td>
+            
+
+            <td>
+                94
+            </td>
+            <td rowno="6">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                202011389
+            </td>
+            <td>
+                金工实习(一)
+            </td>
+            <td>
+                50基础实践
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                2.0
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                C:100
+            </td>
+            
+
+            <td>
+                
+            </td>
+            <td rowno="7">
+            </td>
+            <td>
+                    <label style="color: Red">
+                        未公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="alter">
+            <td>
+                202011388
+            </td>
+            <td>
+                JAVA程序设计
+            </td>
+            <td>
+                41专业方向组选课
+            </td>
+            <td>
+                3.5000
+            </td>
+            <td>
+                2.5
+            </td>
+            <td>
+                89
+            </td>
+            <td>
+                83
+            </td>
+            <td>
+                A:30,C:70
+            </td>
+            
+
+            <td>
+                85
+            </td>
+            <td rowno="8">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                202011387
+            </td>
+            <td>
+                云计算与大数据平台
+            </td>
+            <td>
+                40专业核心课
+            </td>
+            <td>
+                2.8000
+            </td>
+            <td>
+                2.0
+            </td>
+            <td>
+                98.3
+            </td>
+            <td>
+                64
+            </td>
+            <td>
+                A:40,C:60
+            </td>
+            
+
+            <td>
+                78
+            </td>
+            <td rowno="9">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="alter">
+            <td>
+                202011386
+            </td>
+            <td>
+                数据结构
+            </td>
+            <td>
+                31学科基础课
+            </td>
+            <td>
+                4.5000
+            </td>
+            <td>
+                4.0
+            </td>
+            <td>
+                90
+            </td>
+            <td>
+                95
+            </td>
+            <td>
+                A:30,C:50,G:20
+            </td>
+            
+
+            <td>
+                95
+            </td>
+            <td rowno="10">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                202011385
+            </td>
+            <td>
+                离散数学
+            </td>
+            <td>
+                31学科基础课
+            </td>
+            <td>
+                3.3000
+            </td>
+            <td>
+                3.0
+            </td>
+            <td>
+                91
+            </td>
+            <td>
+                77
+            </td>
+            <td>
+                A:40,C:60
+            </td>
+            
+
+            <td>
+                83
+            </td>
+            <td rowno="11">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="alter">
+            <td>
+                202011383
+            </td>
+            <td>
+                概率论与数理统计(一)
+            </td>
+            <td>
+                11通识教育必修课
+            </td>
+            <td>
+                3.8000
+            </td>
+            <td>
+                3.0
+            </td>
+            <td>
+                96
+            </td>
+            <td>
+                84
+            </td>
+            <td>
+                A:30,C:70
+            </td>
+            
+
+            <td>
+                88
+            </td>
+            <td rowno="12">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                202011382
+            </td>
+            <td>
+                大学物理(一)-2
+            </td>
+            <td>
+                11通识教育必修课
+            </td>
+            <td>
+                2.8000
+            </td>
+            <td>
+                3.5
+            </td>
+            <td>
+                100
+            </td>
+            <td>
+                69
+            </td>
+            <td>
+                A:30,C:70
+            </td>
+            
+
+            <td>
+                78
+            </td>
+            <td rowno="13">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="alter">
+            <td>
+                202011380
+            </td>
+            <td>
+                毛泽东思想和中国特色社会主义理论体系概论
+            </td>
+            <td>
+                11通识教育必修课
+            </td>
+            <td>
+                3.9000
+            </td>
+            <td>
+                5.0
+            </td>
+            <td>
+                88
+            </td>
+            <td>
+                91
+            </td>
+            <td>
+                A:30,B:30,C:40
+            </td>
+            
+
+            <td>
+                89
+            </td>
+            <td rowno="14">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                202011378
+            </td>
+            <td>
+                物理实验(一)-2
+            </td>
+            <td>
+                11通识教育必修课
+            </td>
+            <td>
+                2.7000
+            </td>
+            <td>
+                1.5
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                77
+            </td>
+            <td>
+                C:100
+            </td>
+            
+
+            <td>
+                77
+            </td>
+            <td rowno="15">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="alter">
+            <td>
+                202011128
+            </td>
+            <td>
+                形势与政策(一)-3
+            </td>
+            <td>
+                11通识教育必修课
+            </td>
+            <td>
+                4.1000
+            </td>
+            <td>
+                0.2
+            </td>
+            <td>
+                100
+            </td>
+            <td>
+                85
+            </td>
+            <td>
+                A:40,C:60
+            </td>
+            
+
+            <td>
+                91
+            </td>
+            <td rowno="16">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                202010969
+            </td>
+            <td>
+                兴趣体育选修课-1
+            </td>
+            <td>
+                12通识教育选修课
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                1.0
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                C:100
+            </td>
+            
+
+            <td>
+                
+            </td>
+            <td rowno="17">
+            </td>
+            <td>
+                    <label style="color: Red">
+                        未公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr class="alter">
+            <td>
+                202010784
+            </td>
+            <td>
+                大学英语-3
+            </td>
+            <td>
+                11通识教育必修课
+            </td>
+            <td>
+                3.2000
+            </td>
+            <td>
+                2.0
+            </td>
+            <td>
+                92
+            </td>
+            <td>
+                76
+            </td>
+            <td>
+                A:40,C:60
+            </td>
+            
+
+            <td>
+                82
+            </td>
+            <td rowno="18">
+                                    <label style="color: Gray">不允许报名</label>
+            </td>
+            <td>
+                    <label>
+                        已公布
+                    </label>
+            </td>
+            <td>
+            </td>
+        </tr>
+        </tbody></table>
+</form>    <br>
+</div>
+
+    </div>
+    
+    <script type="text/javascript">
+//<![CDATA[
+jQuery(document).ready(function(){
+if(!jQuery.telerik) jQuery.telerik = {};
+jQuery.telerik.cultureInfo={"shortDate":"yyyy-M-d","longDate":"yyyy\u0027年\u0027M\u0027月\u0027d\u0027日\u0027","longTime":"H:mm:ss","shortTime":"H:mm","fullDateTime":"yyyy\u0027年\u0027M\u0027月\u0027d\u0027日\u0027 H:mm:ss","sortableDateTime":"yyyy\u0027-\u0027MM\u0027-\u0027dd\u0027T\u0027HH\u0027:\u0027mm\u0027:\u0027ss","universalSortableDateTime":"yyyy\u0027-\u0027MM\u0027-\u0027dd HH\u0027:\u0027mm\u0027:\u0027ss\u0027Z\u0027","generalDateShortTime":"yyyy-M-d H:mm","generalDateTime":"yyyy-M-d H:mm:ss","monthDay":"M\u0027月\u0027d\u0027日\u0027","monthYear":"yyyy\u0027年\u0027M\u0027月\u0027","days":["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],"abbrDays":["周日","周一","周二","周三","周四","周五","周六"],"shortestDays":["日","一","二","三","四","五","六"],"abbrMonths":["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月",""],"months":["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月",""],"am":"上午","pm":"下午","dateSeparator":"-","timeSeparator":":","firstDayOfWeek":0,"currencydecimaldigits":2,"currencydecimalseparator":".","currencygroupseparator":",","currencygroupsize":3,"currencynegative":2,"currencypositive":0,"currencysymbol":"￥","numericdecimaldigits":2,"numericdecimalseparator":".","numericgroupseparator":",","numericgroupsize":3,"numericnegative":1,"percentdecimaldigits":2,"percentdecimalseparator":".","percentgroupseparator":",","percentgroupsize":3,"percentnegative":1,"percentpositive":1,"percentsymbol":"%"};
+});
+//]]>
+</script>
+
+
+</body></html>
